@@ -18,4 +18,16 @@ class Region {
 			return true;
 		return false;
 	}
+
+	public function width() {
+		return Math.abs(x1 - x2);
+	}
+
+	public function height() {
+		return Math.abs(y1 - y2);
+	}
+
+	public function area() {
+		return this.width() * this.height();
+	}
 }

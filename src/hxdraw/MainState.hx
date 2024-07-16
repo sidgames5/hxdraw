@@ -1,11 +1,19 @@
 package hxdraw;
 
+import sys.io.File;
+import lime.graphics.Image;
+import lime.math.Rectangle;
+import openfl.display.PNGEncoderOptions;
+import openfl.utils.ByteArray;
+import openfl.display.BitmapData;
 import flixel.text.FlxText;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.util.FlxColor;
 import hxdraw.util.math.Region;
+
+using StringTools;
 
 class MainState extends FlxState {
 	private var canvas:Region;
@@ -82,5 +90,18 @@ class MainState extends FlxState {
 		}
 		if (size <= 0)
 			size = 1;
+
+		if (FlxG.keys.justPressed.F2) {
+			var rect:Null<Rectangle> = new Rectangle(canvas.x1, canvas.y1, canvas.width(), canvas.height());
+			var image:Image = FlxG.stage.window.readPixels(rect);
+			var bitmapData = new BitmapData(cast canvas.width(), cast canvas.height(), true, 0);
+			bitmapData.setPixels(bitmapData.rect, ByteArray.fromBytes(image.data.toBytes()));
+			var bytes = bitmapData.encode(bitmapData.rect, new PNGEncoderOptions());
+			var dt = Date.now().toString();
+			dt = dt.replace(":", "");
+			dt = dt.replace("-", "");
+			dt = dt.replace(" ", "_");
+			File.saveBytes('hxdraw_$dt.png', bytes);
+		}
 	}
 }
