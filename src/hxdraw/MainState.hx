@@ -1,5 +1,6 @@
 package hxdraw;
 
+import lime.ui.FileDialog;
 import sys.io.File;
 import lime.graphics.Image;
 import lime.math.Rectangle;
@@ -91,7 +92,7 @@ class MainState extends FlxState {
 		if (size <= 0)
 			size = 1;
 
-		if (FlxG.keys.justPressed.F2) {
+		if (FlxG.keys.pressed.CONTROL && FlxG.keys.justPressed.S) {
 			var rect:Null<Rectangle> = new Rectangle(canvas.x1, canvas.y1, canvas.width(), canvas.height());
 			var image:Image = FlxG.stage.window.readPixels(rect);
 			var bitmapData = new BitmapData(cast canvas.width(), cast canvas.height(), true, 0);
@@ -101,7 +102,11 @@ class MainState extends FlxState {
 			dt = dt.replace(":", "");
 			dt = dt.replace("-", "");
 			dt = dt.replace(" ", "_");
-			File.saveBytes('hxdraw_$dt.png', bytes);
+			var fn = 'hxdraw_$dt.png';
+			var path = "";
+			var saveDialog = new FileDialog();
+			saveDialog.save(bytes, "png", fn, "Save Image");
+			// File.saveBytes(path, bytes);
 		}
 	}
 }
