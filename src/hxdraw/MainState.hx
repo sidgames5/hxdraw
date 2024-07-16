@@ -29,6 +29,8 @@ class MainState extends FlxState {
 	private var cursorSizeUp:FlxText;
 	private var cursorSizeDown:FlxText;
 	private var cursorSize:FlxText;
+	private var clearButton:FlxText;
+	private var saveButton:FlxText;
 
 	override public function create() {
 		super.create();
@@ -55,6 +57,11 @@ class MainState extends FlxState {
 		cursorSizeDown = new FlxText(0, canvas.x1 * 7, 0, "-", 36);
 		add(cursorSizeDown);
 
+		clearButton = new FlxText(0, canvas.x1 * 9, 0, "CLEAR", 8);
+		add(clearButton);
+		saveButton = new FlxText(0, canvas.x1 * 10, 0, "SAVE", 8);
+		add(saveButton);
+
 		color = FlxColor.WHITE;
 	}
 
@@ -68,6 +75,9 @@ class MainState extends FlxState {
 		}
 
 		if (FlxG.keys.justPressed.SPACE) {
+			FlxG.switchState(new MainState());
+		}
+		if (FlxG.mouse.overlaps(clearButton) && FlxG.mouse.justPressed) {
 			FlxG.switchState(new MainState());
 		}
 
@@ -92,7 +102,7 @@ class MainState extends FlxState {
 		if (size <= 0)
 			size = 1;
 
-		if (FlxG.keys.pressed.CONTROL && FlxG.keys.justPressed.S) {
+		if ((FlxG.keys.pressed.CONTROL && FlxG.keys.justPressed.S) || (FlxG.mouse.overlaps(saveButton) && FlxG.mouse.justPressed)) {
 			var rect:Null<Rectangle> = new Rectangle(canvas.x1, canvas.y1, canvas.width(), canvas.height());
 			var image:Image = FlxG.stage.window.readPixels(rect);
 			var bitmapData = new BitmapData(cast canvas.width(), cast canvas.height(), true, 0);
