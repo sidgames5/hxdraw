@@ -1,5 +1,6 @@
 package hxdraw;
 
+import flixel.text.FlxText;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
@@ -7,14 +8,18 @@ import flixel.util.FlxColor;
 import hxdraw.util.math.Region;
 
 class MainState extends FlxState {
-	private static var canvas:Region;
+	private var canvas:Region;
 
-	private static var color:FlxColor;
+	private var color:FlxColor;
+	private var size:Int = 2;
 
-	private static var colorSelectorWhite:FlxSprite;
-	private static var colorSelectorRed:FlxSprite;
-	private static var colorSelectorGreen:FlxSprite;
-	private static var colorSelectorBlue:FlxSprite;
+	private var colorSelectorWhite:FlxSprite;
+	private var colorSelectorRed:FlxSprite;
+	private var colorSelectorGreen:FlxSprite;
+	private var colorSelectorBlue:FlxSprite;
+	private var cursorSizeUp:FlxText;
+	private var cursorSizeDown:FlxText;
+	private var cursorSize:FlxText;
 
 	override public function create() {
 		super.create();
@@ -34,6 +39,13 @@ class MainState extends FlxState {
 		colorSelectorBlue.makeGraphic(cast canvas.x1, cast canvas.x1, FlxColor.BLUE);
 		add(colorSelectorBlue);
 
+		cursorSizeUp = new FlxText(0, canvas.x1 * 5, 0, "+", 36);
+		add(cursorSizeUp);
+		cursorSize = new FlxText(0, canvas.x1 * 6, 0, '$size', 36);
+		add(cursorSize);
+		cursorSizeDown = new FlxText(0, canvas.x1 * 7, 0, "-", 36);
+		add(cursorSizeDown);
+
 		color = FlxColor.WHITE;
 	}
 
@@ -42,7 +54,7 @@ class MainState extends FlxState {
 
 		if (FlxG.mouse.pressed && canvas.contains(FlxG.mouse.x, FlxG.mouse.y)) {
 			var tr = new FlxSprite(FlxG.mouse.x, FlxG.mouse.y);
-			tr.makeGraphic(2, 2, color);
+			tr.makeGraphic(size, size, color);
 			add(tr);
 		}
 
@@ -60,5 +72,15 @@ class MainState extends FlxState {
 			if (FlxG.mouse.overlaps(colorSelectorBlue))
 				color = FlxColor.BLUE;
 		}
+
+		cursorSize.text = '$size';
+		if (FlxG.mouse.justPressed) {
+			if (FlxG.mouse.overlaps(cursorSizeUp))
+				size += 1;
+			if (FlxG.mouse.overlaps(cursorSizeDown))
+				size -= 1;
+		}
+		if (size <= 0)
+			size = 1;
 	}
 }
